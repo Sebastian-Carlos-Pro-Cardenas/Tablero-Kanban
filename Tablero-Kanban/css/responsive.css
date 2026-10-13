@@ -1,0 +1,120 @@
+/* =========================================
+   ESTILOS RESPONSIVE Y MEDIA QUERIES
+   ========================================= */
+
+@media (max-width: 767px) {
+    .site-header {
+        padding: 0.5rem 1rem;
+    }
+
+    .menu-toggle {
+        display: block; 
+    }
+
+    .main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--white);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow);
+    }
+
+    .main-nav.active {
+        display: block; 
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .main-nav a {
+        padding: 0.85rem 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .main-container {
+        padding: 1rem;
+    }
+
+    .dashboard-controls {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .stats-panel {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 0.5rem;
+    }
+
+    .action-bar {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    .action-bar .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .kanban-board {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .kanban-column {
+        max-height: none; 
+    }
+
+    .modal-content {
+        max-width: 95%;
+        margin: 0 auto;
+        max-height: 85vh;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr; 
+        gap: 0;
+    }
+
+    .edit-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .stats-panel {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .kanban-board {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+
+    .kanban-board .kanban-column:last-child {
+        grid-column: span 2; 
+    }
+}
+
+@media (min-width: 992px) {
+    .menu-toggle {
+        display: none; 
+    }
+
+    .main-nav {
+        display: block !important;
+    }
+
+    .kanban-board {
+        grid-template-columns: repeat(3, 1fr); 
+    }
+}

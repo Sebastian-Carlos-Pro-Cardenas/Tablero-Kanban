@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevKanban - Gestor de Proyectos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="logo-container">
+            <i class="fa-solid fa-kanban"></i>
+            <h1>DevKanban</h1>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="main-nav" id="mainNav">
+            <ul>
+                <li><a href="#" class="active"><i class="fa-solid fa-columns"></i> Tablero</a></li>
+                <li><a href="#" id="openCreateModalNav"><i class="fa-solid fa-plus-circle"></i> Nueva Tarea</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <section class="dashboard-controls">
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <span class="stat-title">Total</span>
+                    <span id="statTotal" class="stat-value">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-title">Por Hacer</span>
+                    <span id="statTodo" class="stat-value">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-title">En Proceso</span>
+                    <span id="statDoing" class="stat-value">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-title">Finalizado</span>
+                    <span id="statDone" class="stat-value">0</span>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <div class="search-container">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar tarea por título...">
+                </div>
+                <button id="openCreateModalBtn" class="btn-primary">
+                    <i class="fa-solid fa-plus"></i> Nueva Tarea
+                </button>
+            </div>
+        </section>
+
+        <section class="kanban-board">
+            <div class="kanban-column" data-status="todo">
+                <div class="column-header">
+                    <h2><i class="fa-solid fa-list-check"></i> Por Hacer</h2>
+                    <span class="task-count" id="countTodo">0</span>
+                </div>
+                <div class="task-list" id="todoList">
+                </div>
+            </div>
+
+            <div class="kanban-column" data-status="doing">
+                <div class="column-header">
+                    <h2><i class="fa-solid fa-spinner"></i> En Proceso</h2>
+                    <span class="task-count" id="countDoing">0</span>
+                </div>
+                <div class="task-list" id="doingList">
+                </div>
+            </div>
+
+            <div class="kanban-column" data-status="done">
+                <div class="column-header">
+                    <h2><i class="fa-solid fa-circle-check"></i> Finalizado</h2>
+                    <span class="task-count" id="countDone">0</span>
+                </div>
+                <div class="task-list" id="doneList">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Crear Nueva Tarea</h3>
+                <button class="close-modal" id="closeCreateModal">&times;</button>
+            </div>
+            <form id="createTaskForm">
+                <div class="form-group">
+                    <label for="taskTitle">Título *</label>
+                    <input type="text" id="taskTitle" required placeholder="Ej: Diseñar interfaz en Figma">
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Descripción</label>
+                    <textarea id="taskDescription" rows="3" placeholder="Detalles de la tarea..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskPriority">Prioridad</label>
+                        <select id="taskPriority">
+                            <option value="Baja">Baja</option>
+                            <option value="Media" selected>Media</option>
+                            <option value="Alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Fecha Límite</label>
+                        <input type="date" id="taskDueDate">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelCreateBtn">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Tarea</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="detailModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="detailModalTitle">Detalle de la Tarea</h3>
+                <button class="close-modal" id="closeDetailModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editTaskForm">
+                    <input type="hidden" id="editTaskId">
+                    <div class="form-group">
+                        <label for="editTaskTitle">Título</label>
+                        <input type="text" id="editTaskTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTaskDescription">Descripción</label>
+                        <textarea id="editTaskDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editTaskPriority">Prioridad</label>
+                            <select id="editTaskPriority">
+                                <option value="Baja">Baja</option>
+                                <option value="Media">Media</option>
+                                <option value="Alta">Alta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTaskDueDate">Fecha Límite</label>
+                            <input type="date" id="editTaskDueDate">
+                        </div>
+                    </div>
+                    <div class="edit-actions">
+                        <button type="submit" class="btn-primary btn-sm">Actualizar Cambios</button>
+                        <button type="button" id="deleteTaskBtn" class="btn-danger btn-sm">
+                            <i class="fa-solid fa-trash"></i> Eliminar Tarea
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="divider">
+
+                <div class="comments-section">
+                    <h4>Comentarios</h4>
+                    <div class="comments-list" id="commentsList">
+                    </div>
+                    <form id="addCommentForm" class="comment-form">
+                        <input type="text" id="commentAuthor" placeholder="Tu nombre..." required>
+                        <div class="comment-input-group">
+                            <input type="text" id="commentText" placeholder="Escribe un comentario..." required>
+                            <button type="submit" class="btn-secondary">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
